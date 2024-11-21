@@ -1,14 +1,10 @@
-from enemigo import Enemigo
-from config import jefe_final_image
 from bala import Bala
-
-import pygame
-
 class Jefe:
 
     def __init__(self, x, y, jefe_final_image):
-        # Inicialización del jefe con su posición e imagen
-        self.rect = pygame.Rect(x, y, jefe_final_image.get_width(), jefe_final_image.get_height())
+        self.x = x
+        self.y = y
+        self.rect = jefe_final_image.get_rect(topleft=(x, y))
         self.imagen = jefe_final_image
         self.vida = 500
         self.ataque = 20

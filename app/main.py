@@ -1,31 +1,140 @@
-from enemigo import Enemigo
-import random
 import pygame
-from config import (
-    screen_width, screen_height, enemigo_image, disparo_doble_image,
-    vida_image, bomba_image, heroe_image, doncella_image, nave_image,
-    screen, menu_background_image, background_image, WHITE, RED, YELLOW
-)
-from power_up import PowerUp
-from jefe_final import Jefe
-from nave import Nave
-from bala import Bala
-
+import random
 pygame.init()
+
+background_image = pygame.image.load(r"C:\Users\david\Downloads\fondo.jpg")
+background_width, background_height = background_image.get_size()
+
+screen_width = int(background_width * 0.8)  
+screen_height = background_height
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Space Shooter") 
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+
+heroe_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (3).png")
+doncella_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com.png")
+nave_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (1).png")
+enemigo_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (2).png")
+jefe_final_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (4).png")
+menu_background_image = pygame.image.load(r"C:\Users\david\Downloads\fondo_menu.jpg")
+
+disparo_doble_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (5).png")
+vida_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (6).png")
+bomba_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (7).png")
+
+heroe_image = pygame.transform.scale(heroe_image, (80, 80))
+doncella_image = pygame.transform.scale(doncella_image, (80, 80))
+nave_image = pygame.transform.scale(nave_image, (60, 60))
+nave_image = pygame.transform.rotate(nave_image, -90)
+enemigo_image = pygame.transform.scale(enemigo_image, (60, 60))
+jefe_final_image = pygame.transform.scale(jefe_final_image, (120, 120))
+disparo_doble_image = pygame.transform.scale(disparo_doble_image, (40, 40))
+vida_image = pygame.transform.scale(vida_image, (40, 40))
+bomba_image = pygame.transform.scale(bomba_image, (40, 40))
+background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+menu_background_image = pygame.transform.scale(menu_background_image, (screen_width, screen_height))
+
+class Nave:
+    def __init__(self, x, y, image, vida=100, ataque=10, defensa=5, nivel=1):
+        self.x = x
+        self.y = y
+        self.image = image
+        self.velocidad_x = 0
+        self.velocidad_y = 0
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.vida = vida
+        self.ataque = ataque
+        self.defensa = defensa
+        self.nivel = nivel
+        self.enemigos_eliminados = 0
+        self.puede_disparar_doble = False
+
+    def mover(self):
+        self.x += self.velocidad_x
+        self.y += self.velocidad_y
+        self.x = max(0, min(self.x, screen_width - self.rect.width))
+        self.y = max(0, min(self.y, screen_height - self.rect.height))
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def dibujar(self):
+        screen.blit(self.image, (self.x, self.y))
+
+    def recibir_dano(self, danio):
+        dano_real = max(0, danio - self.defensa)
+        self.vida -= dano_real
+        if self.vida <= 0:
+            self.vida = 0
+
+    def subir_nivel(self):
+        if self.nivel < 10:
+            self.nivel += 1
+            self.vida += 20
+            self.ataque += 5
+            self.defensa += 2
+
+class Enemigo(Nave):
+    def __init__(self, x, y, image, vida=50, ataque=5, defensa=3, nivel=1):
+        super().__init__(x, y, image, vida, ataque, defensa, nivel)
+        self.velocidad_x = random.choice([-3, -2, -1, 1, 2, 3])
+        self.velocidad_y = random.choice([-3, -2, -1, 1, 2, 3])
+
+    def mover(self):
+        self.x += self.velocidad_x
+        self.y += self.velocidad_y
+        if self.x <= 0 or self.x >= screen_width - self.rect.width:
+            self.velocidad_x = -self.velocidad_x
+        if self.y <= 0 or self.y >= screen_height - self.rect.height:
+            self.velocidad_y = -self.velocidad_y
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def atacar(self, nave):
+        dano_real = max(0, self.ataque - nave.defensa)
+        nave.recibir_dano(dano_real)
+
+class JefeFinal(Enemigo):
+    def __init__(self, x, y):
+        super().__init__(x, y, jefe_final_image, vida=500, ataque=20, defensa=10, nivel=3)
+        self.balas = []
+
+    def atacar(self, nave):
+        bala = Bala(self.x + self.rect.width // 2, self.y + self.rect.height)
+        bala.velocidad_y = 5
+        self.balas.append(bala)
+
+class Bala:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.velocidad_y = -5
+        self.rect = pygame.Rect(x, y, 5, 5)
+
+    def mover(self):
+        self.y += self.velocidad_y
+        self.rect.y = self.y
+
+class PowerUp:
+    def __init__(self, x, y, tipo, image):
+        self.x = x
+        self.y = y
+        self.tipo = tipo
+        self.image = image
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+    def dibujar(self):
+        screen.blit(self.image, (self.x, self.y))
 
 class Juego:
     def __init__(self):
         self.nave = None
         self.balas = []
-        self.enemigos = [
-            Enemigo(
-                random.randint(0, screen_width - 60),
-                random.randint(0, screen_height - 60),
-                enemigo_image,
-                screen_width=screen_width,
-                screen_height=screen_height
-            ) for _ in range(10)
-        ]
+        self.enemigos = [Enemigo(random.randint(0, screen_width - 60), random.randint(0, screen_height - 60), enemigo_image) for _ in range(10)]
         self.power_ups = []
         self.jefe_final = None
         self.reloj = pygame.time.Clock()
@@ -143,7 +252,7 @@ class Juego:
                 self.enemigos.remove(enemigo)
 
         if self.nave.nivel == 3 and not self.jefe_final_aparecido:
-            self.jefe_final = Jefe(screen_width // 2, 50)
+            self.jefe_final = JefeFinal(screen_width // 2, 50)
             self.enemigos = [Enemigo(random.randint(0, screen_width - 60), 
                                      random.randint(0, screen_height - 60), 
                                      enemigo_image) for _ in range(6)]
@@ -290,4 +399,4 @@ def juego():
 
 juego()
 
-pygame.quit()  
+pygame.quit()
