@@ -27,6 +27,9 @@ Space Shooter es un juego arcade desarrollado en Python utilizando la biblioteca
 - `3`: Seleccionar Nave.
 - `ESC`: Salir del juego.
 
+## Autor
+Creado por: David Cuartas y Sebastian Beron
+
 ## 🛠️ Instalación y ejecución
 
 1. Asegúrate de tener Python 3.9 o superior instalado.
