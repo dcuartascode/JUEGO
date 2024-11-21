@@ -37,3 +37,4 @@ Creado por: David Cuartas y Sebastian Beron
 
    ```bash
    pip install pygame
+3. Ejecutar desde el main.py
