@@ -2,7 +2,7 @@ import pygame
 import random
 pygame.init()
 
-background_image = pygame.image.load(r"C:\Users\david\Downloads\fondo.jpg")
+background_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\fondo.jpg")
 background_width, background_height = background_image.get_size()
 
 screen_width = int(background_width * 0.8)  
@@ -16,16 +16,16 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
-heroe_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (3).png")
-doncella_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com.png")
-nave_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (1).png")
-enemigo_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (2).png")
-jefe_final_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (4).png")
-menu_background_image = pygame.image.load(r"C:\Users\david\Downloads\fondo_menu.jpg")
+heroe_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (3).png")
+doncella_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com.png")
+nave_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (1).png")
+enemigo_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (2).png")
+jefe_final_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (4).png")
+menu_background_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\fondo_menu.jpg")
 
-disparo_doble_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (5).png")
-vida_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (6).png")
-bomba_image = pygame.image.load(r"C:\Users\david\Downloads\klipartz.com (7).png")
+disparo_doble_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (5).png")
+vida_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (6).png")
+bomba_image = pygame.image.load(r"C:\Users\david\Desktop\JUEGO-master\JUEGO\imagenes\klipartz.com (7).png")
 
 heroe_image = pygame.transform.scale(heroe_image, (80, 80))
 doncella_image = pygame.transform.scale(doncella_image, (80, 80))
